@@ -66,7 +66,8 @@ struct ast {
         char* stringVal;            // Para strings e identificadores
         int boolVal;                // Para valores booleanos (0 o 1)
     } valor;
-    
+    int esFloat;    
+
     struct ast* izquierdo;          // Hijo izquierdo
     struct ast* derecho;            // Hijo derecho
     struct ast* siguiente;          // Para listas (parámetros, argumentos)

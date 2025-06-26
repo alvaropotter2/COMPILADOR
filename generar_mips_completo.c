@@ -5,13 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-// FUNCIÓN CORREGIDA: NO generar constantes float para números enteros
+//Generar constantes float utilizadas en el programa
 void generarConstantesFloatEnDatos(struct ast* nodo, FILE* archivo) {
     if (nodo == NULL) return;
     
-    if (nodo->tipo == NODO_NUMERO) {
-        // CRÍTICO: NO generar float para ningún número entero
-        printf("DEBUG: Examinando número %d - NO generando constante float\n", nodo->valor.intVal);
+    if (nodo->tipo == NODO_NUMERO && esNodoFloat(nodo)) {
+        fprintf(archivo, "    flt_%p: .float %.6f\n", (void*)nodo, nodo->valor.floatVal);
     }
     
     // Recorrer recursivamente todos los nodos
@@ -103,11 +102,10 @@ void generarMIPSCompleto(struct ast* nodo, const char* nombreArchivo) {
     fprintf(archivo, ".data\n");
     fprintf(archivo, "    newline: .asciiz \"\\n\"\n");
     
-    // Generar strings de datos
+    // Generar strings y constantes float en la seccion de datos
     generarStringsEnDatos(nodo, archivo);
     
-    // NO generar constantes float para números enteros
-    printf("NO generando constantes float para enteros...\n");
+    generarConstantesFloatEnDatos(nodo, archivo);
     
     printf("Generando seccion de datos...\n");
     

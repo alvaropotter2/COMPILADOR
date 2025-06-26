@@ -11,7 +11,7 @@
 // ----------------------------- DECLARACION DE VARIABLES Y ESTRUCTURAS -------------------------------------------
 
 //Declaracion de variables "extern" sirve para declararlas como variables globales
-FILE *yyout;
+extern FILE *yyout;
 extern FILE* yyin;
 extern int yylex();
 extern int num_linea; //Almacena el numero de linea durante la ejecucion
@@ -444,9 +444,12 @@ T:
                 $$.n = crearNodoVariable($1, tabla[pos].registro);   // USAR NUEVA FUNCIÓN
             }
         } else {
-            char error_msg[100];
-            sprintf(error_msg, "Variable '%s' no declarada", $1);
-            yyerror(error_msg);
+            printf("Variable %s no declarada, insertando por defecto\n", $1);
+            insertarSimbolo($1, "integer", 0, NULL);
+            pos = buscarTabla(indice, $1, tabla);
+            $$.tipo = tabla[pos].tipo;
+            $$.integer = tabla[pos].integer;
+            $$.n = crearNodoVariable($1, tabla[pos].registro);
         }
     }
     | LPAREN E RPAREN {
@@ -601,6 +604,7 @@ int main(int argc, char** argv) {
         return 1;
     }
     
+    inicializarTabla();
     printf("Iniciando compilacion de %s...\n", argv[1]);
     int result = yyparse();
     

@@ -24,6 +24,7 @@ struct ast* crearNodoTerminal(int valor) {
     nodo->tipo = NODO_NUMERO;
     // CRÍTICO: Asignar DIRECTAMENTE el valor entero
     nodo->valor.intVal = valor;
+    nodo->esFloat = 0;
     nodo->izquierdo = NULL;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
@@ -42,7 +43,7 @@ struct ast* crearNodoTerminalFloat(float valor) {
     struct ast* nodo = malloc(sizeof(struct ast));
     nodo->tipo = NODO_NUMERO;
     nodo->valor.floatVal = valor;
-    nodo->valor.intVal = (int)valor;
+    nodo->esFloat = 1;
     nodo->izquierdo = NULL;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
@@ -58,6 +59,7 @@ struct ast* crearNodoTerminalString(char* valor) {
     struct ast* nodo = malloc(sizeof(struct ast));
     nodo->tipo = NODO_STRING;
     nodo->valor.stringVal = strdup(valor);
+    nodo->esFloat = 0;
     nodo->izquierdo = NULL;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
@@ -72,6 +74,7 @@ struct ast* crearNodoTerminalBool(int valor) {
     struct ast* nodo = malloc(sizeof(struct ast));
     nodo->tipo = NODO_BOOLEAN;
     nodo->valor.boolVal = valor;
+    nodo->esFloat = 0;
     nodo->izquierdo = NULL;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
@@ -86,6 +89,7 @@ struct ast* crearVariableTerminal(void* valor, int registro) {
     struct ast* nodo = malloc(sizeof(struct ast));
     nodo->tipo = NODO_VARIABLE;
     nodo->valor.stringVal = (char*)valor;
+    nodo->esFloat = 0;
     nodo->izquierdo = NULL;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
@@ -99,6 +103,7 @@ struct ast* crearNodoVariable(char* nombre, int registro) {
     struct ast* nodo = malloc(sizeof(struct ast));
     nodo->tipo = NODO_VARIABLE;
     nodo->valor.stringVal = strdup(nombre);
+    nodo->esFloat = 0;
     nodo->izquierdo = NULL;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
@@ -114,6 +119,7 @@ struct ast* crearNodoNoTerminal(struct ast* izq, struct ast* der, tipoNodo tipo)
     nodo->izquierdo = izq;
     nodo->derecho = der;
     nodo->siguiente = NULL;
+    nodo->esFloat = 0;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
     nodo->etiqueta = NULL;
@@ -127,6 +133,7 @@ struct ast* crearNodoUnario(struct ast* hijo, tipoNodo tipo) {
     nodo->izquierdo = hijo;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
+    nodo->esFloat = 0;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
     nodo->etiqueta = NULL;
@@ -138,6 +145,7 @@ struct ast* crearNodoAsignacion(char* identificador, struct ast* expresion) {
     struct ast* nodo = malloc(sizeof(struct ast));
     nodo->tipo = NODO_ASIGNACION;
     nodo->valor.stringVal = strdup(identificador);
+    nodo->esFloat = 0;
     nodo->izquierdo = NULL;
     nodo->derecho = expresion;
     nodo->siguiente = NULL;
@@ -155,6 +163,7 @@ struct ast* crearNodoAsignacionCompuesta(char* identificador, struct ast* expres
     nodo->izquierdo = expresion;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
+    nodo->esFloat = 0;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
     nodo->etiqueta = NULL;
@@ -168,6 +177,7 @@ struct ast* crearNodoPuts(struct ast* expresion) {
     nodo->izquierdo = expresion;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
+    nodo->esFloat = 0;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
     nodo->etiqueta = NULL;
@@ -181,6 +191,7 @@ struct ast* crearNodoCondicional(struct ast* condicion, struct ast* bloqueIf, st
     nodo->izquierdo = condicion;
     nodo->derecho = bloqueIf;
     nodo->siguiente = bloqueElse;
+    nodo->esFloat = 0;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
     nodo->etiqueta = NULL;
@@ -193,6 +204,7 @@ struct ast* crearNodoBucle(struct ast* condicion, struct ast* cuerpo) {
     nodo->tipo = NODO_BUCLE;
     nodo->izquierdo = condicion;
     nodo->derecho = cuerpo;
+    nodo->esFloat = 0;
     nodo->siguiente = NULL;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
@@ -210,6 +222,7 @@ struct ast* crearNodoVacio() {
     nodo->resultado = 0;
     nodo->etiqueta = NULL;
     nodo->linea = 0;
+    nodo->esFloat = 0;
     return nodo;
 }
 
@@ -221,6 +234,7 @@ struct ast* crearNodoFuncion(char* nombre, struct ast* parametros, struct ast* c
     nodo->izquierdo = parametros;
     nodo->derecho = cuerpo;
     nodo->siguiente = NULL;
+    nodo->esFloat = 0;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
     nodo->etiqueta = NULL;
@@ -235,6 +249,7 @@ struct ast* crearNodoLlamadaFuncion(char* nombre, struct ast* argumentos) {
     nodo->izquierdo = argumentos;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
+    nodo->esFloat = 0;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
     nodo->etiqueta = NULL;
@@ -249,6 +264,7 @@ struct ast* crearNodoParametro(char* nombre) {
     nodo->izquierdo = NULL;
     nodo->derecho = NULL;
     nodo->siguiente = NULL;
+    nodo->esFloat = 0;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
     nodo->etiqueta = NULL;
@@ -263,6 +279,7 @@ struct ast* crearNodoAccesoArray(char* nombre, struct ast* indice1, struct ast* 
     nodo->izquierdo = indice1;
     nodo->derecho = indice2;
     nodo->siguiente = NULL;
+    nodo->esFloat = 0;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
     nodo->etiqueta = NULL;
@@ -277,6 +294,7 @@ struct ast* crearNodoAsignacionArray(char* nombre, struct ast* indice1, struct a
     nodo->izquierdo = indice1;
     nodo->derecho = indice2;
     nodo->siguiente = valor;
+    nodo->esFloat = 0;
     nodo->resultado = registro_contador % 10;
     registro_contador++;
     nodo->etiqueta = NULL;
@@ -502,14 +520,18 @@ int esComparacionStrings(struct ast* izq, struct ast* der) {
 int esNodoFloat(struct ast* nodo) {
     if (nodo == NULL) return 0;
     
-    // NUNCA tratar enteros como floats
+ 
     if (nodo->tipo == NODO_NUMERO) {
-        return 0;  // SIEMPRE retornar 0 para números, tratarlos como enteros
+        return nodo->esFloat;
+    }
+
+    if (nodo->tipo == SUMA || nodo->tipo == RESTA || nodo->tipo == MULTIPLICACION || nodo->tipo == DIVISION) {
+        return esNodoFloat(nodo->izquierdo) || esNodoFloat(nodo->derecho);
     }
     
     if (nodo->tipo == NODO_IDENTIFICADOR || nodo->tipo == NODO_VARIABLE) {
         int pos = buscarSimbolo(nodo->valor.stringVal);
-        if (pos >= 0) {
+        if (pos >= 0 && tabla[pos].tipo) {
             return strcmp(tabla[pos].tipo, "float") == 0;
         }
     }
@@ -552,7 +574,15 @@ void generarCodigoMIPSArchivo(struct ast* nodo, FILE* archivo) {
             fprintf(archivo, "    # Asignacion a %s\n", nodo->valor.stringVal);
             if (nodo->derecho != NULL) {
                 generarCodigoMIPSArchivo(nodo->derecho, archivo);
-                fprintf(archivo, "    sw $v0, var_%s\n", nodo->valor.stringVal);
+                if (esVariableFloat(nodo->valor.stringVal)) {
+                    /* Guardar resultado float en variable (resultado en $f0) */
+                    fprintf(archivo, "    s.s $f0, var_%s\n", nodo->valor.stringVal);
+                } else if (esVariableString(nodo->valor.stringVal)) {
+                    /* Para strings, $v0 ya contiene la direccion */
+                    fprintf(archivo, "    sw $v0, var_%s\n", nodo->valor.stringVal);
+                } else {
+                    fprintf(archivo, "    sw $v0, var_%s\n", nodo->valor.stringVal);
+                }
             }
             break;
             
@@ -571,16 +601,26 @@ void generarCodigoMIPSArchivo(struct ast* nodo, FILE* archivo) {
                         if (esVariableString(nodo->izquierdo->valor.stringVal)) {
                             fprintf(archivo, "    lw $a0, var_%s\n", nodo->izquierdo->valor.stringVal);
                             fprintf(archivo, "    li $v0, 4\n");
+			} else if (esVariableFloat(nodo->izquierdo->valor.stringVal)) {
+                            fprintf(archivo, "    l.s $f12, var_%s\n", nodo->izquierdo->valor.stringVal);
+                            fprintf(archivo, "    li $v0, 2\n");
+
                         } else {
-                            // Para enteros y cualquier otro tipo
+                            
                             fprintf(archivo, "    lw $a0, var_%s\n", nodo->izquierdo->valor.stringVal);
                             fprintf(archivo, "    li $v0, 1\n");
                         }
                         break;
                     default:
-                        fprintf(archivo, "    move $a0, $v0\n");
-                        fprintf(archivo, "    li $v0, 1\n");
-                        break;
+
+                        if (esNodoFloat(nodo->izquierdo)) {
+                            fprintf(archivo, "    mov.s $f12, $f0\n");
+                            fprintf(archivo, "    li $v0, 2\n");
+                        } else {
+                            fprintf(archivo, "    move $a0, $v0\n");
+                            fprintf(archivo, "    li $v0, 1\n");
+                        }
+			break;
                 }
                 
                 fprintf(archivo, "    syscall\n");
@@ -591,77 +631,289 @@ void generarCodigoMIPSArchivo(struct ast* nodo, FILE* archivo) {
             break;
             
         case NODO_NUMERO:
-            // CRÍTICO: Debug y usar SOLO el campo intVal
-            printf("DEBUG CRITICO: Generando código para nodo NUMERO - intVal=%d (address=%p)\n", 
-                   nodo->valor.intVal, (void*)nodo);
-            fprintf(archivo, "    li $v0, %d\n", nodo->valor.intVal);
+            if (esNodoFloat(nodo)) {
+                printf("DEBUG: Generando codigo para float %.6f\n", nodo->valor.floatVal);
+                fprintf(archivo, "    l.s $f0, flt_%p\n", (void*)nodo);
+            } else {
+                printf("DEBUG CRITICO: Generando código para nodo NUMERO - intVal=%d (address=%p)\n",
+                       nodo->valor.intVal, (void*)nodo);
+                fprintf(archivo, "    li $v0, %d\n", nodo->valor.intVal);
+            }
+            break;
+
+	case NODO_BOOLEAN:
+            fprintf(archivo, "    li $v0, %d\n", nodo->valor.boolVal);
+            break;
+	
+	case NODO_STRING:
+            fprintf(archivo, "    la $v0, str_%p\n", (void*)nodo);
             break;
             
         case NODO_VARIABLE:
-            // SIEMPRE CARGAR COMO ENTERO
-            fprintf(archivo, "    lw $v0, var_%s\n", nodo->valor.stringVal);
+            if (esVariableFloat(nodo->valor.stringVal)) {
+                fprintf(archivo, "    l.s $f0, var_%s\n", nodo->valor.stringVal);
+            } else {
+                fprintf(archivo, "    lw $v0, var_%s\n", nodo->valor.stringVal);
+            }
             break;
             
         case SUMA:
             fprintf(archivo, "    # Suma\n");
-            generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
-            fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
-            generarCodigoMIPSArchivo(nodo->derecho, archivo);
-            fprintf(archivo, "    add $v0, $t8, $v0   # Sumar\n");
+            if (esNodoFloat(nodo->izquierdo) || esNodoFloat(nodo->derecho)) {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                if (!esNodoFloat(nodo->izquierdo)) {
+                    fprintf(archivo, "    mtc1 $v0, $f2\n");
+                    fprintf(archivo, "    cvt.s.w $f2, $f2\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f2, $f0\n");
+                }
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                if (!esNodoFloat(nodo->derecho)) {
+                    fprintf(archivo, "    mtc1 $v0, $f4\n");
+                    fprintf(archivo, "    cvt.s.w $f4, $f4\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f4, $f0\n");
+                }
+                fprintf(archivo, "    add.s $f0, $f2, $f4\n");
+            } else {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                fprintf(archivo, "    add $v0, $t8, $v0   # Sumar\n");
+            }
             break;
             
         case RESTA:
             fprintf(archivo, "    # Resta\n");
-            generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
-            fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
-            generarCodigoMIPSArchivo(nodo->derecho, archivo);
-            fprintf(archivo, "    sub $v0, $t8, $v0   # Restar\n");
+            if (esNodoFloat(nodo->izquierdo) || esNodoFloat(nodo->derecho)) {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                if (!esNodoFloat(nodo->izquierdo)) {
+                    fprintf(archivo, "    mtc1 $v0, $f2\n");
+                    fprintf(archivo, "    cvt.s.w $f2, $f2\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f2, $f0\n");
+                }
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                if (!esNodoFloat(nodo->derecho)) {
+                    fprintf(archivo, "    mtc1 $v0, $f4\n");
+                    fprintf(archivo, "    cvt.s.w $f4, $f4\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f4, $f0\n");
+                }
+                fprintf(archivo, "    sub.s $f0, $f2, $f4\n");
+            } else {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                fprintf(archivo, "    sub $v0, $t8, $v0   # Restar\n");
+            }
             break;
             
         case MULTIPLICACION:
             fprintf(archivo, "    # Multiplicacion\n");
-            generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
-            fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
-            generarCodigoMIPSArchivo(nodo->derecho, archivo);
-            fprintf(archivo, "    mult $t8, $v0       # Multiplicar\n");
-            fprintf(archivo, "    mflo $v0            # Obtener resultado\n");
+            if (esNodoFloat(nodo->izquierdo) || esNodoFloat(nodo->derecho)) {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                if (!esNodoFloat(nodo->izquierdo)) {
+                    fprintf(archivo, "    mtc1 $v0, $f2\n");
+                    fprintf(archivo, "    cvt.s.w $f2, $f2\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f2, $f0\n");
+                }
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                if (!esNodoFloat(nodo->derecho)) {
+                    fprintf(archivo, "    mtc1 $v0, $f4\n");
+                    fprintf(archivo, "    cvt.s.w $f4, $f4\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f4, $f0\n");
+                }
+                fprintf(archivo, "    mul.s $f0, $f2, $f4\n");
+            } else {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                fprintf(archivo, "    mult $t8, $v0       # Multiplicar\n");
+                fprintf(archivo, "    mflo $v0            # Obtener resultado\n");
+            }
             break;
             
         case DIVISION:
             fprintf(archivo, "    # Division\n");
-            generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
-            fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
+            if (esNodoFloat(nodo->izquierdo) || esNodoFloat(nodo->derecho)) {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                if (!esNodoFloat(nodo->izquierdo)) {
+                    fprintf(archivo, "    mtc1 $v0, $f2\n");
+                    fprintf(archivo, "    cvt.s.w $f2, $f2\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f2, $f0\n");
+                }
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                if (!esNodoFloat(nodo->derecho)) {
+                    fprintf(archivo, "    mtc1 $v0, $f4\n");
+                    fprintf(archivo, "    cvt.s.w $f4, $f4\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f4, $f0\n");
+                }
+                fprintf(archivo, "    div.s $f0, $f2, $f4\n");
+            } else {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                fprintf(archivo, "    div $t8, $v0        # Dividir\n");
+                fprintf(archivo, "    mflo $v0            # Obtener cociente\n");
+            }
+            break;
+
+        case CONCATENACION:
+            fprintf(archivo, "    # Concatenacion de strings\n");
+	    generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+	    fprintf(archivo, "    move $a0, $v0\n");
             generarCodigoMIPSArchivo(nodo->derecho, archivo);
-            fprintf(archivo, "    div $t8, $v0        # Dividir\n");
-            fprintf(archivo, "    mflo $v0            # Obtener cociente\n");
+            fprintf(archivo, "    move $a1, $v0\n");
+            fprintf(archivo, "    jal concatenar_strings\n");
+            break;
+
+	 case AND_LOGICO:
+            fprintf(archivo, "    # AND logico\n");
+	    generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+	    fprintf(archivo, "    move $t8, $v0\n");
+            generarCodigoMIPSArchivo(nodo->derecho, archivo);
+	    fprintf(archivo, "    move $t9, $v0\n");
+            fprintf(archivo, "    and $t6, $t8, $t9\n");
+            fprintf(archivo, "    sltu $v0, $zero, $t6\n");
+            break;
+
+        case OR_LOGICO:
+            fprintf(archivo, "    # OR logico\n");
+            generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+            fprintf(archivo, "    move $t8, $v0\n");
+            generarCodigoMIPSArchivo(nodo->derecho, archivo);
+            fprintf(archivo, "    move $t9, $v0\n");
+            fprintf(archivo, "    or $t6, $t8, $t9\n");
+            fprintf(archivo, "    sltu $v0, $zero, $t6\n");
+            break;
+
+        case NOT_LOGICO:
+            fprintf(archivo, "    # NOT logico\n");
+            generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+            fprintf(archivo, "    sltu $v0, $zero, $v0\n");
+            fprintf(archivo, "    xori $v0, $v0, 1\n");
             break;
             
         case MAYOR_QUE:
             fprintf(archivo, "    # Comparacion mayor que\n");
-            generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
-            fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
-            generarCodigoMIPSArchivo(nodo->derecho, archivo);
-            fprintf(archivo, "    move $t9, $v0       # Guardar segundo operando\n");
-            fprintf(archivo, "    slt $v0, $t9, $t8   # $v0 = ($t9 < $t8) ? 1 : 0, es decir ($t8 > $t9)\n");
+            if (esNodoFloat(nodo->izquierdo) || esNodoFloat(nodo->derecho)) {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                if (!esNodoFloat(nodo->izquierdo)) {
+                    fprintf(archivo, "    mtc1 $v0, $f2\n");
+                    fprintf(archivo, "    cvt.s.w $f2, $f2\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f2, $f0\n");
+                }
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                if (!esNodoFloat(nodo->derecho)) {
+                    fprintf(archivo, "    mtc1 $v0, $f4\n");
+                    fprintf(archivo, "    cvt.s.w $f4, $f4\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f4, $f0\n");
+                }
+                {
+                    char* etiq_true = obtenerNuevaEtiqueta();
+                    char* etiq_fin = obtenerNuevaEtiqueta();
+                    fprintf(archivo, "    c.le.s $f4, $f2\n");
+                    fprintf(archivo, "    bc1f %s\n", etiq_true);
+                    fprintf(archivo, "    li $v0, 1\n");
+                    fprintf(archivo, "    j %s\n", etiq_fin);
+                    fprintf(archivo, "%s:\n", etiq_true);
+                    fprintf(archivo, "    li $v0, 0\n");
+                    fprintf(archivo, "%s:\n", etiq_fin);
+                }
+            } else {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                fprintf(archivo, "    move $t9, $v0       # Guardar segundo operando\n");
+                fprintf(archivo, "    slt $v0, $t9, $t8   # $v0 = ($t9 < $t8) ? 1 : 0, es decir ($t8 > $t9)\n");
+            }
             break;
             
         case MENOR_QUE:
             fprintf(archivo, "    # Comparacion menor que\n");
-            generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
-            fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
-            generarCodigoMIPSArchivo(nodo->derecho, archivo);
-            fprintf(archivo, "    move $t9, $v0       # Guardar segundo operando\n");
-            fprintf(archivo, "    slt $v0, $t8, $t9   # $v0 = ($t8 < $t9) ? 1 : 0\n");
+            if (esNodoFloat(nodo->izquierdo) || esNodoFloat(nodo->derecho)) {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                if (!esNodoFloat(nodo->izquierdo)) {
+                    fprintf(archivo, "    mtc1 $v0, $f2\n");
+                    fprintf(archivo, "    cvt.s.w $f2, $f2\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f2, $f0\n");
+                }
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                if (!esNodoFloat(nodo->derecho)) {
+                    fprintf(archivo, "    mtc1 $v0, $f4\n");
+                    fprintf(archivo, "    cvt.s.w $f4, $f4\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f4, $f0\n");
+                }
+                {
+                    char* etiq_true = obtenerNuevaEtiqueta();
+                    char* etiq_fin = obtenerNuevaEtiqueta();
+                    fprintf(archivo, "    c.lt.s $f2, $f4\n");
+                    fprintf(archivo, "    bc1t %s\n", etiq_true);
+                    fprintf(archivo, "    li $v0, 0\n");
+                    fprintf(archivo, "    j %s\n", etiq_fin);
+                    fprintf(archivo, "%s:\n", etiq_true);
+                    fprintf(archivo, "    li $v0, 1\n");
+                    fprintf(archivo, "%s:\n", etiq_fin);
+                }
+            } else {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                fprintf(archivo, "    move $t9, $v0       # Guardar segundo operando\n");
+                fprintf(archivo, "    slt $v0, $t8, $t9   # $v0 = ($t8 < $t9) ? 1 : 0\n");
+            }
             break;
             
         case IGUAL:
             fprintf(archivo, "    # Comparacion de igualdad\n");
-            generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
-            fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
-            generarCodigoMIPSArchivo(nodo->derecho, archivo);
-            fprintf(archivo, "    move $t9, $v0       # Guardar segundo operando\n");
-            fprintf(archivo, "    seq $v0, $t8, $t9   # $v0 = ($t8 == $t9) ? 1 : 0\n");
-            break;
+            if (esComparacionStrings(nodo->izquierdo, nodo->derecho)) {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                fprintf(archivo, "    move $a0, $v0\n");
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                fprintf(archivo, "    move $a1, $v0\n");
+                fprintf(archivo, "    jal comparar_strings\n");
+            } else if (esNodoFloat(nodo->izquierdo) || esNodoFloat(nodo->derecho)) {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                if (!esNodoFloat(nodo->izquierdo)) {
+                    fprintf(archivo, "    mtc1 $v0, $f2\n");
+                    fprintf(archivo, "    cvt.s.w $f2, $f2\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f2, $f0\n");
+                }
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                if (!esNodoFloat(nodo->derecho)) {
+                    fprintf(archivo, "    mtc1 $v0, $f4\n");
+                    fprintf(archivo, "    cvt.s.w $f4, $f4\n");
+                } else {
+                    fprintf(archivo, "    mov.s $f4, $f0\n");
+                }
+                {
+                    char* etiq_true = obtenerNuevaEtiqueta();
+                    char* etiq_fin = obtenerNuevaEtiqueta();
+                    fprintf(archivo, "    c.eq.s $f2, $f4\n");
+                    fprintf(archivo, "    bc1t %s\n", etiq_true);
+                    fprintf(archivo, "    li $v0, 0\n");
+                    fprintf(archivo, "    j %s\n", etiq_fin);
+                    fprintf(archivo, "%s:\n", etiq_true);
+                    fprintf(archivo, "    li $v0, 1\n");
+                    fprintf(archivo, "%s:\n", etiq_fin);
+                }
+            } else {
+                generarCodigoMIPSArchivo(nodo->izquierdo, archivo);
+                fprintf(archivo, "    move $t8, $v0       # Guardar primer operando\n");
+                generarCodigoMIPSArchivo(nodo->derecho, archivo);
+                fprintf(archivo, "    move $t9, $v0       # Guardar segundo operando\n");
+                fprintf(archivo, "    seq $v0, $t8, $t9   # $v0 = ($t8 == $t9) ? 1 : 0\n");
+            }
             
         case NODO_CONDICIONAL:
             {
