@@ -74,10 +74,10 @@ run: $(EXECUTABLE)
 test: $(EXECUTABLE)
 	@echo "Ejecutando tests..."
 	@for file in test*.rb; do \
-		if [ -f "$$file" ]; then \
-			echo "Compilando $$file..."; \
-			./$(EXECUTABLE) "$$file" "$${file%.rb}.asm"; \
-		fi \
+	if [ -f "$$file" ]; then \
+	echo "Compilando $$file..."; \
+	./$(EXECUTABLE) "$$file"; \
+	fi \
 	done
 
 # Limpiar archivos generados

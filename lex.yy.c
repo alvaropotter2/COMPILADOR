@@ -984,7 +984,7 @@ YY_RULE_SETUP
 case 37:
 YY_RULE_SETUP
 #line 67 "ruby_lexer.flex"
-{ return RBRACKET; }
+{ return RBRACE; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
