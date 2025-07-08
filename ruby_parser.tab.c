@@ -584,12 +584,12 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    92,    92,   100,   101,   108,   109,   110,   111,   112,
-     116,   120,   121,   126,   126,   138,   138,   155,   159,   169,
-     237,   249,   265,   287,   301,   315,   337,   349,   350,   351,
-     355,   358,   366,   379,   392,   398,   404,   410,   416,   422,
-     457,   464,   474,   484,   496,   506,   516,   530,   538,   546,
-     558,   566,   577
+       0,    93,    93,   101,   102,   109,   110,   111,   112,   113,
+     117,   121,   122,   127,   127,   139,   139,   156,   160,   170,
+     238,   250,   266,   288,   302,   316,   338,   350,   351,   352,
+     356,   359,   367,   380,   393,   399,   405,   411,   417,   423,
+     458,   465,   475,   485,   497,   507,   517,   531,   539,   547,
+     559,   567,   578
 };
 #endif
 
@@ -1528,21 +1528,21 @@ yysetstate:
         else if (strcmp((yyvsp[-2].tr).tipo, tipos[1]) == 0 && strcmp((yyvsp[0].tr).tipo, tipos[1]) == 0){
             if((yyvsp[0].tr).floatDecimal != 0.0) {
                 (yyval.tr).n = crearNodoNoTerminal((yyvsp[-2].tr).n, (yyvsp[0].tr).n, DIVISION);
-                (yyval.tr).floatDecimal = (yyvsp[-2].tr).floatDecimal / (yyvsp[0].tr).floatDecimal;
+#line 93 "ruby_parser.y"
     }
-#line 1861 "ruby_parser.tab.c"
+#line 102 "ruby_parser.y"
 
-  case 26: /* E: MINUS E  */
-#line 337 "ruby_parser.y"
-                           {
-        if (strcmp((yyvsp[0].tr).tipo, tipos[0]) == 0) {
-            (yyval.tr).n = crearNodoUnario((yyvsp[0].tr).n, NEGACION);
-            (yyval.tr).integer = -(yyvsp[0].tr).integer;
-        } else if (strcmp((yyvsp[0].tr).tipo, tipos[1]) == 0) {
-            (yyval.tr).n = crearNodoUnario((yyvsp[0].tr).n, NEGACION);
-            (yyval.tr).floatDecimal = -(yyvsp[0].tr).floatDecimal;
+#line 113 "ruby_parser.y"
+#line 117 "ruby_parser.y"
+#line 122 "ruby_parser.y"
+#line 127 "ruby_parser.y"
+#line 131 "ruby_parser.y"
+#line 139 "ruby_parser.y"
+#line 145 "ruby_parser.y"
+#line 156 "ruby_parser.y"
+#line 160 "ruby_parser.y"
     }
-#line 1878 "ruby_parser.tab.c"
+#line 170 "ruby_parser.y"
     break;
 
   case 27: /* E: T  */
@@ -1710,44 +1710,44 @@ yysetstate:
 #line 530 "ruby_parser.y"
             {
         (yyval.tr).n = crearNodoNoTerminal((yyvsp[-2].tr).n, (yyvsp[0].tr).n, AND_LOGICO);
-        if (strcmp((yyvsp[-2].tr).tipo, tipos[3]) == 0 && strcmp((yyvsp[0].tr).tipo, tipos[3]) == 0) {
-            (yyval.tr).boolean = (yyvsp[-2].tr).boolean && (yyvsp[0].tr).boolean;
+#line 238 "ruby_parser.y"
+#line 250 "ruby_parser.y"
     }
-#line 2157 "ruby_parser.tab.c"
-  case 48: /* L: E OR E  */
-#line 538 "ruby_parser.y"
-             {
-        (yyval.tr).n = crearNodoNoTerminal((yyvsp[-2].tr).n, (yyvsp[0].tr).n, OR_LOGICO);
-        if (strcmp((yyvsp[-2].tr).tipo, tipos[3]) == 0 && strcmp((yyvsp[0].tr).tipo, tipos[3]) == 0) {
-            (yyval.tr).boolean = (yyvsp[-2].tr).boolean || (yyvsp[0].tr).boolean;
+#line 266 "ruby_parser.y"
+#line 288 "ruby_parser.y"
+#line 302 "ruby_parser.y"
+#line 316 "ruby_parser.y"
+#line 338 "ruby_parser.y"
+#line 350 "ruby_parser.y"
+#line 351 "ruby_parser.y"
+#line 352 "ruby_parser.y"
+#line 356 "ruby_parser.y"
+#line 359 "ruby_parser.y"
+#line 367 "ruby_parser.y"
+#line 380 "ruby_parser.y"
+#line 393 "ruby_parser.y"
+#line 399 "ruby_parser.y"
+#line 405 "ruby_parser.y"
     }
-#line 2170 "ruby_parser.tab.c"
-  case 49: /* L: NOT E  */
-#line 546 "ruby_parser.y"
-            {
-        (yyval.tr).n = crearNodoUnario((yyvsp[0].tr).n, NOT_LOGICO);
-        if (strcmp((yyvsp[0].tr).tipo, tipos[3]) == 0) {
-            (yyval.tr).boolean = !(yyvsp[0].tr).boolean;
-    }
-#line 2183 "ruby_parser.tab.c"
-  case 50: /* I: IF E NEWLINE S END NEWLINE  */
-#line 558 "ruby_parser.y"
-                               {
-        if (strcmp((yyvsp[-4].tr).tipo, tipos[3]) == 0) {
-            (yyval.tr).n = crearNodoCondicional((yyvsp[-4].tr).n, (yyvsp[-2].tr).n, NULL);
+#line 411 "ruby_parser.y"
+#line 417 "ruby_parser.y"
+#line 423 "ruby_parser.y"
+#line 458 "ruby_parser.y"
+#line 465 "ruby_parser.y"
+#line 475 "ruby_parser.y"
         }
     }
-#line 2196 "ruby_parser.tab.c"
-  case 51: /* I: IF E NEWLINE S ELSE NEWLINE S END NEWLINE  */
-#line 566 "ruby_parser.y"
-                                                {
-        if (strcmp((yyvsp[-7].tr).tipo, tipos[3]) == 0) {
-            (yyval.tr).n = crearNodoCondicional((yyvsp[-7].tr).n, (yyvsp[-5].tr).n, (yyvsp[-2].tr).n);
+#line 485 "ruby_parser.y"
+#line 497 "ruby_parser.y"
+#line 507 "ruby_parser.y"
+#line 517 "ruby_parser.y"
+#line 531 "ruby_parser.y"
+#line 539 "ruby_parser.y"
     }
-#line 2209 "ruby_parser.tab.c"
-  case 52: /* B: WHILE E NEWLINE S END NEWLINE  */
-#line 577 "ruby_parser.y"
-                                  {
+#line 547 "ruby_parser.y"
+#line 559 "ruby_parser.y"
+#line 567 "ruby_parser.y"
+#line 578 "ruby_parser.y"
         if (strcmp((yyvsp[-4].tr).tipo, tipos[3]) == 0) {
             (yyval.tr).n = crearNodoBucle((yyvsp[-4].tr).n, (yyvsp[-2].tr).n);
     }
@@ -2421,7 +2421,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval);
+#line 588 "ruby_parser.y"
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
