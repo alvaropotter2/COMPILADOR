@@ -79,6 +79,9 @@ void agregarParametrosATabla(struct ast* parametros) {
 %left MULTIPLY DIVIDE
 %right NOT UMINUS
 
+/* Habilitar mensajes de error detallados */
+%define parse.error verbose
+
 %start P
 
 %%
@@ -621,5 +624,9 @@ int main(int argc, char** argv) {
 }
 
 void yyerror(const char* s) {
-    fprintf(stderr, "Error en linea %d: %s\n", num_linea, s);
+    if (strstr(s, "end of file")) {
+        fprintf(stderr, "Error en linea %d: %s, expecting END\n", num_linea, s);
+    } else {
+        fprintf(stderr, "Error en linea %d: %s\n", num_linea, s);
+    }
 }
