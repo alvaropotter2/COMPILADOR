@@ -79,7 +79,7 @@ void agregarParametrosATabla(struct ast* parametros) {
 %left MULTIPLY DIVIDE
 %right NOT UMINUS
 
-%define parse.error verbose
+%error-verbose
 
 %start P
 
