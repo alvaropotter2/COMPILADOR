@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "AST_ruby.h"
 #include "tabla_simbolos.h"
 #include <stdio.h>
