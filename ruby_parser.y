@@ -563,16 +563,32 @@ I:
         printf("> [SENTENCIA] - IF\n");
         if (strcmp($2.tipo, tipos[3]) == 0) {
             $$.n = crearNodoCondicional($2.n, $4.n, NULL);
+        } else if (strcmp($2.tipo, tipos[0]) == 0) {
+            struct ast* cero = crearNodoTerminal(0);
+            struct ast* cond = crearNodoNoTerminal($2.n, cero, DIFERENTE);
+            $$.n = crearNodoCondicional(cond, $4.n, NULL);
+        } else if (strcmp($2.tipo, tipos[1]) == 0) {
+            struct ast* cero = crearNodoTerminalFloat(0.0);
+            struct ast* cond = crearNodoNoTerminal($2.n, cero, DIFERENTE);
+            $$.n = crearNodoCondicional(cond, $4.n, NULL);
         } else {
-            yyerror("Error: La condicion del IF debe ser booleana");
+            yyerror("Error: La condicion del IF debe ser booleana o numerica");
         }
     }
     | IF E NEWLINE S ELSE NEWLINE S END NEWLINE {
         printf("> [SENTENCIA] - IF-ELSE\n");
         if (strcmp($2.tipo, tipos[3]) == 0) {
             $$.n = crearNodoCondicional($2.n, $4.n, $7.n);
+        } else if (strcmp($2.tipo, tipos[0]) == 0) {
+            struct ast* cero = crearNodoTerminal(0);
+            struct ast* cond = crearNodoNoTerminal($2.n, cero, DIFERENTE);
+            $$.n = crearNodoCondicional(cond, $4.n, $7.n);
+        } else if (strcmp($2.tipo, tipos[1]) == 0) {
+            struct ast* cero = crearNodoTerminalFloat(0.0);
+            struct ast* cond = crearNodoNoTerminal($2.n, cero, DIFERENTE);
+            $$.n = crearNodoCondicional(cond, $4.n, $7.n);
         } else {
-            yyerror("Error: La condicion del IF debe ser booleana");
+            yyerror("Error: La condicion del IF debe ser booleana o numerica");
         }
     }
 ;
@@ -582,8 +598,16 @@ B:
         printf("> [SENTENCIA] - WHILE\n");
         if (strcmp($2.tipo, tipos[3]) == 0) {
             $$.n = crearNodoBucle($2.n, $4.n);
+        } else if (strcmp($2.tipo, tipos[0]) == 0) {
+            struct ast* cero = crearNodoTerminal(0);
+            struct ast* cond = crearNodoNoTerminal($2.n, cero, DIFERENTE);
+            $$.n = crearNodoBucle(cond, $4.n);
+        } else if (strcmp($2.tipo, tipos[1]) == 0) {
+            struct ast* cero = crearNodoTerminalFloat(0.0);
+            struct ast* cond = crearNodoNoTerminal($2.n, cero, DIFERENTE);
+            $$.n = crearNodoBucle(cond, $4.n);
         } else {
-            yyerror("Error: La condicion del WHILE debe ser booleana");
+            yyerror("Error: La condicion del WHILE debe ser booleana o numerica");
         }
     }
 ;
